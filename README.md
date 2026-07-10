@@ -1,32 +1,78 @@
-# Kubernetes Local Learning Lab
+# Build My Custom Docker Image
 
-## Goal
+This project contains a custom Docker image built using the provided `Dockerfile`.
 
-This repository contains my hands-on practice for Docker and Kubernetes.
+## Navigate to the docker folder
 
-## Local Environment
+```bash
+cd docker
+```
 
-- Windows 11
-- VS Code
-- Git
-- Docker Desktop
-- Minikube
-- kubectl
+## Build the Docker image
 
-## Completed
+```bash
+docker build -t maiharshrivastava/my-nginx:v1 .
+```
 
-- Docker installed
-- kubectl installed
-- Minikube installed
-- Git initialized
-- GitHub repository created
-- Pulled nginx image
-- Created first Docker container
-- Accessed nginx on http://localhost:8080
+## Verify the image
 
-## Next Topics
+```bash
+docker images
+```
 
-- Docker Logs
-- Docker Exec
-- Dockerfile
-- Kubernetes Pod
+Expected output:
+
+```
+REPOSITORY                     TAG
+maiharshrivastava/my-nginx     v1
+```
+
+## Run the custom image
+
+```bash
+docker run -d --name my-custom-nginx -p 8081:80 maiharshrivastava/my-nginx:v1
+```
+
+Verify that the container is running:
+
+```bash
+docker ps
+```
+
+Open your browser:
+
+```
+http://localhost:8081
+```
+
+You should see:
+
+```
+Welcome to Maihar's Kubernetes Lab 🚀
+```
+
+## Push the image to Docker Hub
+
+Login to Docker Hub:
+
+```bash
+docker login
+```
+
+Push the image:
+
+```bash
+docker push maiharshrivastava/my-nginx:v1
+```
+
+Now anyone can download your image using:
+
+```bash
+docker pull maiharshrivastava/my-nginx:v1
+```
+
+and run it with:
+
+```bash
+docker run -d --name my-custom-nginx -p 8081:80 maiharshrivastava/my-nginx:v1
+```
