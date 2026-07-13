@@ -4,6 +4,10 @@
 
 ## Step 1: Install Required Software
 
+### Start Docker Desktop
+
+Before working with Kubernetes, ensure Docker Desktop is running.
+
 Install the following software on your local machine:
 
 * Docker Desktop
@@ -321,6 +325,215 @@ Open:
 
 ```text
 http://localhost:8081
+```
+
+---
+
+## Step 18: Start Docker Desktop
+
+
+Verify Docker:
+
+```bash
+docker ps
+```
+
+Check Minikube status:
+
+```bash
+minikube status
+```
+
+If Minikube is stopped, start it:
+
+```bash
+minikube start
+```
+
+Verify the cluster:
+
+```bash
+kubectl cluster-info
+```
+
+---
+
+## Step 19: Create the Namespace Folder
+
+Inside the project, create a folder named:
+
+```text
+namespaces
+```
+
+Project structure:
+
+```text
+kubernates/
+│
+├── docker/
+├── namespaces/
+└── README.md
+```
+
+---
+
+## Step 20: Create Namespaces
+
+Create two namespaces.
+
+```bash
+kubectl create namespace development
+kubectl create namespace testing
+```
+
+Verify:
+
+```bash
+kubectl get namespaces
+```
+
+---
+
+## Step 21: Generate Namespace YAML Files
+
+Generate the namespace YAML files.
+
+```bash
+kubectl create namespace development --dry-run=client -o yaml > namespaces/development.yaml
+
+kubectl create namespace testing --dry-run=client -o yaml > namespaces/testing.yaml
+```
+
+Project structure:
+
+```text
+kubernates/
+│
+├── docker
+
+---
+
+## Step 22: Create the Pods Folder
+
+Inside the project, create a folder named:
+
+```text
+pods
+```
+
+Project structure:
+
+```text
+kubernates/
+│
+├── docker/
+├── namespaces/
+├── pods/
+└── README.md
+```
+
+---
+
+## Step 23: Create the Pod Configuration File
+
+Inside the `pods` folder, create the following file:
+
+```text
+nginx-pod.yaml
+```
+
+Paste the following configuration:
+
+```yaml
+apiVersion: v1
+kind: Pod
+
+metadata:
+  name: nginx-pod
+  namespace: development
+  labels:
+    app: nginx
+
+spec:
+  containers:
+    - name: nginx-container
+      image: nginx:latest
+      ports:
+        - containerPort: 80
+```
+
+---
+
+## Step 24: Deploy the Pod
+
+Apply the Pod configuration.
+
+```bash
+kubectl apply -f pods/nginx-pod.yaml
+```
+
+Verify the Pod:
+
+```bash
+kubectl get pods -n development
+```
+
+Expected Output:
+
+```text
+NAME        READY   STATUS    RESTARTS   AGE
+nginx-pod   1/1     Running   0          10s
+```
+
+---
+
+## Step 25: Describe the Pod
+
+View detailed information about the Pod.
+
+```bash
+kubectl describe pod nginx-pod -n development
+```
+
+---
+
+## Step 26: View Pod Logs
+
+Display the logs of the running Pod.
+
+```bash
+kubectl logs nginx-pod -n development
+```
+
+Expected output:
+
+```text
+Configuration complete; ready for start up
+nginx/1.31.2
+start worker processes
+```
+
+---
+
+## Step 27: Updated Project Structure
+
+```text
+kubernates/
+│
+├── README.md
+│
+├── docker/
+│   ├── Dockerfile
+│   ├── index.html
+│   └── commands.md
+│
+├── namespaces/
+│   ├── development.yaml
+│   └── testing.yaml
+│
+└── pods/
+    └── nginx-pod.yaml
 ```
 
 ---
