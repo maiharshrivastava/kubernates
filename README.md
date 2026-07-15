@@ -538,3 +538,274 @@ kubernates/
 
 ---
 
+---
+
+# ReplicaSets
+
+## Step 28: Create the ReplicaSets Folder
+
+Inside the project, create a folder named:
+
+```text
+replicasets
+```
+
+Project structure:
+
+```text
+kubernates/
+│
+├── docker/
+├── namespaces/
+├── pods/
+├── replicasets/
+└── README.md
+```
+
+---
+
+## Step 29: Remove Existing Standalone Pods
+
+Delete the standalone Pods created earlier.
+
+Development namespace:
+
+```bash
+kubectl delete pod --all -n development
+```
+
+Testing namespace:
+
+```bash
+kubectl delete pod --all -n testing
+```
+
+Verify:
+
+```bash
+kubectl get pods -n development
+kubectl get pods -n testing
+```
+
+Expected output:
+
+```text
+No resources found.
+```
+
+---
+
+## Step 30: Create the Development ReplicaSet
+
+Inside the `replicasets` folder, create:
+
+```text
+development-nginx-rs.yaml
+```
+
+```yaml
+apiVersion: apps/v1
+kind: ReplicaSet
+
+metadata:
+  name: nginx-rs
+  namespace: development
+
+spec:
+  replicas: 3
+
+  selector:
+    matchLabels:
+      app: nginx
+
+  template:
+    metadata:
+      labels:
+        app: nginx
+
+    spec:
+      containers:
+      - name: nginx-container
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+```
+
+---
+
+## Step 31: Deploy the Development ReplicaSet
+
+```bash
+kubectl apply -f replicasets/development-nginx-rs.yaml
+```
+
+Verify:
+
+```bash
+kubectl get rs -n development
+```
+
+Verify the Pods:
+
+```bash
+kubectl get pods -n development
+```
+
+Expected output:
+
+```text
+NAME                 READY   STATUS
+nginx-rs-xxxxx       1/1     Running
+nginx-rs-yyyyy       1/1     Running
+nginx-rs-zzzzz       1/1     Running
+```
+
+---
+
+## Step 32: Test ReplicaSet Self-Healing
+
+Delete one Pod.
+
+```bash
+kubectl delete pod <pod-name> -n development
+```
+
+Verify that Kubernetes automatically creates a new Pod.
+
+```bash
+kubectl get pods -n development
+```
+
+The ReplicaSet maintains the desired number of running Pods.
+
+---
+
+## Step 33: Create the Testing ReplicaSet
+
+Create:
+
+```text
+testing-nginx-rs.yaml
+```
+
+```yaml
+apiVersion: apps/v1
+kind: ReplicaSet
+
+metadata:
+  name: nginx-rs
+  namespace: testing
+
+spec:
+  replicas: 3
+
+  selector:
+    matchLabels:
+      app: nginx
+
+  template:
+    metadata:
+      labels:
+        app: nginx
+
+    spec:
+      containers:
+      - name: nginx-container
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+```
+
+---
+
+## Step 34: Deploy the Testing ReplicaSet
+
+```bash
+kubectl apply -f replicasets/testing-nginx-rs.yaml
+```
+
+Verify:
+
+```bash
+kubectl get rs -n testing
+```
+
+Verify the Pods:
+
+```bash
+kubectl get pods -n testing
+```
+
+Expected output:
+
+```text
+NAME                 READY   STATUS
+nginx-rs-xxxxx       1/1     Running
+nginx-rs-yyyyy       1/1     Running
+nginx-rs-zzzzz       1/1     Running
+```
+
+---
+
+## Step 35: Verify All ReplicaSets
+
+```bash
+kubectl get rs --all-namespaces
+```
+
+Expected output:
+
+```text
+NAMESPACE      NAME       DESIRED   CURRENT   READY
+development    nginx-rs   3         3         3
+testing        nginx-rs   3         3         3
+```
+
+---
+
+## Step 36: Verify All Pods
+
+```bash
+kubectl get pods --all-namespaces
+```
+
+Expected output:
+
+```text
+NAMESPACE      NAME
+development    nginx-rs-xxxxx
+development    nginx-rs-yyyyy
+development    nginx-rs-zzzzz
+testing        nginx-rs-xxxxx
+testing        nginx-rs-yyyyy
+testing        nginx-rs-zzzzz
+```
+
+---
+
+## Step 37: Updated Project Structure
+
+```text
+kubernates/
+│
+├── README.md
+│
+├── docker/
+│   ├── Dockerfile
+│   ├── index.html
+│   └── commands.md
+│
+├── namespaces/
+│   ├── development.yaml
+│   └── testing.yaml
+│
+├── pods/
+│   └── nginx-pod.yaml
+│
+└── replicasets/
+    ├── development-nginx-rs.yaml
+    └── testing-nginx-rs.yaml
+```
+
+---
+
