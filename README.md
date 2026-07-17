@@ -809,3 +809,148 @@ kubernates/
 
 ---
 
+---
+
+## Step 38: Scale the Deployment
+
+Increase the number of replicas from **3** to **5**.
+
+```bash
+kubectl scale deployment nginx-deployment --replicas=5 -n development
+```
+
+Verify the Deployment:
+
+```bash
+kubectl get deployments -n development
+```
+
+Verify the Pods:
+
+```bash
+kubectl get pods -n development
+```
+
+Expected Output:
+
+```text
+NAME                                READY   STATUS
+nginx-deployment-xxxxx-xxxxx        1/1     Running
+nginx-deployment-xxxxx-xxxxx        1/1     Running
+nginx-deployment-xxxxx-xxxxx        1/1     Running
+nginx-deployment-xxxxx-xxxxx        1/1     Running
+nginx-deployment-xxxxx-xxxxx        1/1     Running
+```
+
+---
+
+## Step 39: Scale Down the Deployment
+
+Reduce the replicas from **5** to **2**.
+
+```bash
+kubectl scale deployment nginx-deployment --replicas=2 -n development
+```
+
+Verify:
+
+```bash
+kubectl get pods -n development
+```
+
+Expected Output:
+
+```text
+NAME                                READY   STATUS
+nginx-deployment-xxxxx-xxxxx        1/1     Running
+nginx-deployment-xxxxx-xxxxx        1/1     Running
+```
+
+---
+
+## Step 40: Demonstrate Self-Healing
+
+List the running Pods.
+
+```bash
+kubectl get pods -n development
+```
+
+Delete one Pod.
+
+```bash
+kubectl delete pod <pod-name> -n development
+```
+
+Verify again.
+
+```bash
+kubectl get pods -n development
+```
+
+Expected Result:
+
+Kubernetes automatically creates a new Pod to maintain the desired replica count.
+
+---
+
+## Step 41: Verify the Deployment
+
+Check the Deployment status.
+
+```bash
+kubectl get deployment -n development
+```
+
+Describe the Deployment.
+
+```bash
+kubectl describe deployment nginx-deployment -n development
+```
+
+---
+
+## Step 42: View Deployment Rollout Status
+
+Check whether the Deployment rollout completed successfully.
+
+```bash
+kubectl rollout status deployment/nginx-deployment -n development
+```
+
+Expected Output:
+
+```text
+deployment "nginx-deployment" successfully rolled out
+```
+
+---
+
+## Step 43: Updated Project Structure
+
+```text
+kubernates/
+│
+├── README.md
+│
+├── docker/
+│   ├── Dockerfile
+│   ├── index.html
+│   └── commands.md
+│
+├── namespaces/
+│   ├── development.yaml
+│   └── testing.yaml
+│
+├── pods/
+│   └── nginx-pod.yaml
+│
+├── replicasets/
+│   ├── development-nginx-rs.yaml
+│   └── testing-nginx-rs.yaml
+│
+└── deployments/
+    └── development-nginx-deployment.yaml
+```
+
+---
