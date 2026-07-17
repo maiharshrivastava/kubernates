@@ -954,3 +954,180 @@ kubernates/
 ```
 
 ---
+## Step 44: Create the Services Folder
+
+Inside the project, create a folder named:
+
+```text
+services
+```
+
+Project structure:
+
+```text
+kubernates/
+│
+├── docker/
+├── namespaces/
+├── pods/
+├── replicasets/
+├── deployments/
+├── services/
+└── README.md
+```
+
+---
+
+## Step 45: Create the Service Configuration File
+
+Inside the `services` folder, create the following file:
+
+```text
+development-nginx-nodeport.yaml
+```
+
+---
+
+## Step 46: Create the NodePort Service
+
+Paste the following configuration into `development-nginx-nodeport.yaml`.
+
+```yaml
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: nginx-service
+  namespace: development
+
+spec:
+  type: NodePort
+
+  selector:
+    app: nginx
+
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 30080
+```
+
+---
+
+## Step 47: Deploy the Service
+
+Apply the Service configuration.
+
+```bash
+kubectl apply -f services/development-nginx-nodeport.yaml
+```
+
+Expected Output:
+
+```text
+service/nginx-service created
+```
+
+---
+
+## Step 48: Verify the Service
+
+Verify that the Service has been created successfully.
+
+```bash
+kubectl get svc -n development
+```
+
+Expected Output:
+
+```text
+NAME            TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)
+nginx-service   NodePort   10.x.x.x        <none>        80:30080/TCP
+```
+
+---
+
+## Step 49: Describe the Service
+
+View detailed information about the Service.
+
+```bash
+kubectl describe svc nginx-service -n development
+```
+
+---
+
+## Step 50: Access the Application
+
+Open the application using Minikube.
+
+```bash
+minikube service nginx-service -n development
+```
+
+Alternatively, display the service URL.
+
+```bash
+minikube service nginx-service -n development --url
+```
+
+Open the generated URL in your browser.
+
+Expected Output:
+
+```text
+Welcome to nginx!
+```
+
+---
+
+## Step 51: Verify the Service Endpoints
+
+Verify that the Service is forwarding requests to the Pods.
+
+```bash
+kubectl get endpoints -n development
+```
+
+Expected Output:
+
+```text
+NAME            ENDPOINTS
+nginx-service   <pod-ip>:80,<pod-ip>:80
+```
+
+---
+
+## Step 52: Updated Project Structure
+
+```text
+kubernates/
+│
+├── README.md
+│
+├── docker/
+│   ├── Dockerfile
+│   ├── index.html
+│   └── commands.md
+│
+├── namespaces/
+│   ├── development.yaml
+│   └── testing.yaml
+│
+├── pods/
+│   └── nginx-pod.yaml
+│
+├── replicasets/
+│   ├── development-nginx-rs.yaml
+│   └── testing-nginx-rs.yaml
+│
+├── deployments/
+│   └── development-nginx-deployment.yaml
+│
+└── services/
+    └── development-nginx-nodeport.yaml
+```
+
+---
+
