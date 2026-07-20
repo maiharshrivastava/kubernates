@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: app-config
+  namespace: development
+
+data:
+  app.yaml: |
+    application:
+      name: Kubernetes Demo
+      version: v1
+      message: Hello Maihar
+      environment: Development
