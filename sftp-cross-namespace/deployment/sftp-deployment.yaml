@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sftp-server
+  namespace: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sftp
+  template:
+    metadata:
+      labels:
+        app: sftp
+    spec:
+      containers:
+      - name: sftp
+        image: atmoz/sftp
+        args:
+          - "demo:demo123:1001"
+        ports:
+        - containerPort: 22
